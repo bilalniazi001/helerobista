@@ -43,11 +43,11 @@ export default function ProductCategoryQueue() {
 
         // ✅ Categories array banayein
         const categories = Object.keys(categoryCounts).map(category => ({
-  id: category.toLowerCase().replace(/\s+/g, '-'),
+  id: category,
   name: category,
   productCount: categoryCounts[category],
   imageSrc: categoryImages[category as keyof typeof categoryImages] || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&auto=format&fit=crop&q=80',
-  href: `/shop/${category.toLowerCase().replace(/\s+/g, '-')}`
+  href: `/shop/${category}`
 }));
 
         setCategoriesData(categories);

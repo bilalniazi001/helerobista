@@ -1,9 +1,11 @@
+// components/UI-UX/common/Header.tsx
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Heart, User, Search, ChevronDown, Facebook, Instagram, Youtube, Twitter, Link2 } from 'lucide-react'; 
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import AuthModal from '@/components/AuthModal';
 
 // --- TYPE DEFINITIONS (Interfaces) ---
@@ -50,6 +52,7 @@ export default function SuppliMaxNavbar() {
   const [headerWrapperHeight, setHeaderWrapperHeight] = useState<number>(130); 
   
   const { isAuthenticated, user, logout } = useAuth();
+  const { getCartItemsCount } = useCart();
 
   useEffect(() => {
     const headerWrapperElement = document.getElementById('header-wrapper');
@@ -116,7 +119,7 @@ export default function SuppliMaxNavbar() {
             <div className="flex-1 flex justify-start">
               <nav className="flex space-x-4"> 
                 {topLinks.map((link: TopLink) => (
-                  <a key={link.name} href={link.href} className="hover:text-amber-300 transition-colors duration-150">{link.name}</a>
+                  <Link key={link.name} href={link.href} className="hover:text-amber-300 transition-colors duration-150">{link.name}</Link>
                 ))}
               </nav>
             </div>
@@ -135,7 +138,9 @@ export default function SuppliMaxNavbar() {
         <header className={`bg-white py-4 shadow-sm`}>
           <div className="container mx-auto px-4 flex items-center justify-between">
             <div className="flex-shrink-0">
-              <h1 className="text-4xl font-extrabold text-[#629D23] tracking-tight hover:text-[#4a7a1b] transition-colors cursor-pointer">SuppliMax</h1>
+              <Link href="/">
+                <h1 className="text-4xl font-extrabold text-[#629D23] tracking-tight hover:text-[#4a7a1b] transition-colors cursor-pointer">SuppliMax</h1>
+              </Link>
             </div>
             <div className="flex-1 max-w-xl mx-8">
               <div className="relative flex w-full">
@@ -149,11 +154,15 @@ export default function SuppliMaxNavbar() {
               <a href="#" className="flex flex-col items-center justify-center text-gray-600 hover:text-[#629D23] transition-colors group">
                 <Heart className="w-6 h-6 transform group-hover:scale-110 transition-transform" /><span className="text-xs font-medium mt-1">Wishlist</span>
               </a>
-              <a href="#" className="flex flex-col items-center justify-center text-gray-600 hover:text-[#629D23] transition-colors group relative">
+              
+              {/* ✅ Updated Cart Section with Link and Cart Count */}
+              <Link href="/cart" className="flex flex-col items-center justify-center text-gray-600 hover:text-[#629D23] transition-colors group relative">
                 <ShoppingCart className="w-6 h-6 transform group-hover:scale-110 transition-transform" />
-                <span className="absolute top-0 right-0 -mt-2 -mr-3 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">5</span>
+                <span className="absolute top-0 right-0 -mt-2 -mr-3 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">
+                  {getCartItemsCount()}
+                </span>
                 <span className="text-xs font-medium mt-1">Cart</span>
-              </a>
+              </Link>
               
               {/* ✅ Updated Account Section with Authentication */}
               {isAuthenticated ? (
@@ -173,6 +182,9 @@ export default function SuppliMaxNavbar() {
                     </div>
                     <Link href="/account" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#629D23] hover:text-white transition-colors">
                       My Account
+                    </Link>
+                    <Link href="/cart" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#629D23] hover:text-white transition-colors">
+                      My Cart ({getCartItemsCount()})
                     </Link>
                     <button 
                       onClick={handleLogout}
@@ -218,10 +230,10 @@ export default function SuppliMaxNavbar() {
           <div className="hidden lg:flex items-center space-x-8 h-full">
             {mainNavLinks.map((link: MainNavLink) => (
               <div key={link.name} className={`relative group h-full flex items-center transition-all ${link.dropdown ? 'cursor-pointer z-[70]' : ''}`}>
-                <a href={link.href} className="font-semibold text-sm h-full w-full px-4 uppercase hover:text-white hover:bg-[#2D3B29] transition-colors flex items-center">
+                <Link href={link.href} className="font-semibold text-sm h-full w-full px-4 uppercase hover:text-white hover:bg-[#2D3B29] transition-colors flex items-center">
                   {link.name}
                   {link.dropdown && <ChevronDown className="w-3 h-3 ml-1 transition-transform group-hover:rotate-180" />}
-                </a>
+                </Link>
                 {link.dropdown && <DropdownMenu items={link.dropdown} />}
               </div>
             ))}
@@ -237,10 +249,21 @@ export default function SuppliMaxNavbar() {
       
       {/* ✅ Mobile View */}
       <div className="lg:hidden bg-white shadow-md p-3 flex justify-between items-center sticky top-0 z-50">
-          <h1 className="text-xl font-extrabold text-[#629D23]">SuppliMax</h1>
+          <Link href="/">
+            <h1 className="text-xl font-extrabold text-[#629D23]">SuppliMax</h1>
+          </Link>
           <div className="flex space-x-3">
             <Search className="w-6 h-6 text-gray-600"/>
-            <ShoppingCart className="w-6 h-6 text-gray-600"/>
+            
+            {/* ✅ Mobile Cart Link with Count */}
+            <Link href="/cart" className="relative">
+              <ShoppingCart className="w-6 h-6 text-gray-600"/>
+              {getCartItemsCount() > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">
+                  {getCartItemsCount()}
+                </span>
+              )}
+            </Link>
             
             {/* ✅ Mobile View Authentication */}
             {isAuthenticated ? (
