@@ -38,8 +38,8 @@ async function getProduct(id: string): Promise<Product | null> {
       },
     });
 
-    console.log('📊 [EDIT PAGE] Response status:', res.status);
-    console.log('📊 [EDIT PAGE] Response ok:', res.ok);
+    console.log(' [EDIT PAGE] Response status:', res.status);
+    console.log('[EDIT PAGE] Response ok:', res.ok);
     
     if (!res.ok) {
       console.error(`❌ [EDIT PAGE] Error fetching product: ${res.status} ${res.statusText}`);

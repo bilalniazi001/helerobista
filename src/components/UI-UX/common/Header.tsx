@@ -5,7 +5,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Heart, User, Search, ChevronDown, Facebook, Instagram, Youtube, Twitter } from 'lucide-react'; 
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { useCart } from '@/context/CartContext';
 import AuthModal from '@/components/AuthModal';
 
 // --- TYPE DEFINITIONS (Interfaces) ---
@@ -49,7 +48,7 @@ const mainNavLinks: MainNavLink[] = [
   { name: 'Home', href: '/' },
   { 
     name: 'Shop', 
-    href: '/products',
+    href: '/product',
     dropdown: [
       { name: 'Pre Workout', href: '/shop/Pre Workout' },
       { name: 'Protein', href: '/shop/Protein' },
@@ -98,7 +97,6 @@ export default function SuppliMaxNavbar() {
   const [headerWrapperHeight, setHeaderWrapperHeight] = useState<number>(130); 
   
   const { isAuthenticated, user, logout } = useAuth();
-  const { getCartItemsCount } = useCart();
 
   // Fetch categories from API to ensure consistency with ProductCategoryQueue
   useEffect(() => {
@@ -239,9 +237,6 @@ export default function SuppliMaxNavbar() {
               
               <Link href="/cart" className="flex flex-col items-center justify-center text-gray-600 hover:text-[#629D23] transition-colors group relative">
                 <ShoppingCart className="w-6 h-6 transform group-hover:scale-110 transition-transform" />
-                <span className="absolute top-0 right-0 -mt-2 -mr-3 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">
-                  {getCartItemsCount()}
-                </span>
                 <span className="text-xs font-medium mt-1">Cart</span>
               </Link>
               
@@ -263,7 +258,7 @@ export default function SuppliMaxNavbar() {
                       My Account
                     </Link>
                     <Link href="/cart" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#629D23] hover:text-white transition-colors">
-                      My Cart ({getCartItemsCount()})
+                      My Cart 
                     </Link>
                     <button 
                       onClick={handleLogout}
@@ -340,11 +335,6 @@ export default function SuppliMaxNavbar() {
             
             <Link href="/cart" className="relative">
               <ShoppingCart className="w-6 h-6 text-gray-600"/>
-              {getCartItemsCount() > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">
-                  {getCartItemsCount()}
-                </span>
-              )}
             </Link>
             
             {isAuthenticated ? (

@@ -2,9 +2,9 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-// ✅ UPDATED: id string type ki hai
+// UPDATED: id string type ki hai
 interface Product {
-  id: string; // ✅ CHANGED: number -> string
+  id: string; // CHANGED: number -> string
   name: string;
   price: number;
   description: string;
@@ -20,7 +20,7 @@ interface Product {
 
 async function getCategoryProducts(category: string): Promise<Product[]> {
   try {
-    // ✅ NestJS backend se products fetch karein
+    // NestJS backend se products fetch karein
     const res = await fetch('http://localhost:5000/products', {
       cache: 'no-store'
     });
@@ -32,7 +32,7 @@ async function getCategoryProducts(category: string): Promise<Product[]> {
     
     const allProducts = await res.json();
     
-    // ✅ Frontend mein category filter karein
+    // Frontend mein category filter karein
     const filteredProducts = allProducts.filter((product: Product) => 
       product.category.toLowerCase() === category.toLowerCase()
     );
@@ -53,12 +53,12 @@ interface CategoryPageProps {
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  // ✅ FIX: params ko await karein
+  // FIX: params ko await karein
   const { category } = await params;
   const decodedCategory = decodeURIComponent(category);
   const products = await getCategoryProducts(decodedCategory);
 
-  // ✅ Category name ko properly format karein
+  // Category name ko properly format karein
   const formattedCategory = decodedCategory
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -111,8 +111,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map((product) => (
-              <Link href={`/products/${product.id}`} key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 group">
-                {/* ✅ Product Image - Size adjusted and white background */}
+              <Link href={`/product/${product.id}`} key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 group">
+                {/* Product Image - Size adjusted and white background */}
                 <div className="relative h-56 bg-white overflow-hidden flex items-center justify-center p-4">
                   <img
                     src={product.imageUrl || '/placeholder-image.jpg'}
@@ -120,7 +120,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     className="max-w-full max-h-40 object-contain transition duration-300 group-hover:opacity-90"
                   />
                   
-                  {/* ✅ Badges */}
+                  {/* Badges */}
                   <div className="absolute top-2 left-2 flex flex-col space-y-1">
                     {product.onSale && (
                       <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
@@ -134,7 +134,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     )}
                   </div>
                   
-                  {/* ✅ Featured/Exclusive Badges */}
+                  {/* Featured/Exclusive Badges */}
                   <div className="absolute top-2 right-2 flex flex-col space-y-1">
                     {product.isFeatured && (
                       <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">

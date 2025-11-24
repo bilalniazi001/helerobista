@@ -16,7 +16,7 @@ interface ProductItem {
   rating: number; 
   imageUrl: string;
   isNewArrival?: boolean; 
-  _id?: string; // ✅ MongoDB ID support
+  _id?: string; //  MongoDB ID support
 }
 
 const API_URL = 'http://localhost:5000/products?isFeatured=true';
@@ -43,25 +43,25 @@ const ProductCard: React.FC<{ product: ProductItem; variants: any }> = ({ produc
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   
-  // ✅ Safe product ID getter
+  //  Safe product ID getter
   const getProductId = () => {
     return product.id || product._id || `temp-${Math.random().toString(36).substr(2, 9)}`;
   };
 
-  // ✅ Safe product URL
+  //  Safe product URL
   const getProductUrl = () => {
     const productId = getProductId();
     return productId && !productId.includes('temp-') ? `/product/${productId}` : '#';
   };
 
-  // ✅ Old Price Calculate Karne Ka Formula
+  //  Old Price Calculate Karne Ka Formula
   const oldPrice = product.discountPercentage > 0 
     ? product.price / (1 - product.discountPercentage / 100)
     : undefined;
 
   const stars = Array(5).fill(0).map((_, i) => (
     <Star 
-      key={`star-${getProductId()}-${i}`} // ✅ Unique key with product ID
+      key={`star-${getProductId()}-${i}`} //  Unique key with product ID
       size={16} 
       fill={i < Math.floor(product.rating) ? '#FBBF24' : 'none'} 
       stroke="#FBBF24" 
@@ -80,9 +80,9 @@ const ProductCard: React.FC<{ product: ProductItem; variants: any }> = ({ produc
       onMouseLeave={() => setIsHovered(false)}
       className="relative overflow-hidden bg-white group shadow-md hover:shadow-xl transition-shadow duration-300 rounded-lg"
     >
-      {/* ✅ IMAGE CONTAINER - White background aur centered image */}
+      {/*  IMAGE CONTAINER - White background aur centered image */}
       <div className="relative h-64 w-full overflow-hidden bg-white flex items-center justify-center p-4">
-        {/* ✅ Image with proper sizing - centered and medium size */}
+        {/*  Image with proper sizing - centered and medium size */}
         <img
           src={product.imageUrl || '/placeholder-image.jpg'}
           alt={product.name}
@@ -93,7 +93,7 @@ const ProductCard: React.FC<{ product: ProductItem; variants: any }> = ({ produc
           onError={() => setImageError(true)}
         />
         
-        {/* ✅ Fallback agar image load na ho */}
+        {/*  Fallback agar image load na ho */}
         {imageError && (
           <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 text-gray-500">
             <div className="text-4xl mb-2"></div>
@@ -112,7 +112,7 @@ const ProductCard: React.FC<{ product: ProductItem; variants: any }> = ({ produc
           </div>
         )}
         
-        {/* ✅ Hover Icons - Black hover effect remove kiya */}
+        {/*  Hover Icons - Black hover effect remove kiya */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <motion.div
             initial={{ y: -20, opacity: 0 }}
@@ -124,7 +124,7 @@ const ProductCard: React.FC<{ product: ProductItem; variants: any }> = ({ produc
               <Heart size={20} className="text-gray-700 hover:text-red-500 transition-colors" />
             </button>
             
-            {/* ✅ Safe Link - only if valid product ID */}
+            {/*  Safe Link - only if valid product ID */}
             {productUrl !== '#' ? (
               <Link href={productUrl}>
                 <button className="p-3 bg-green-700 rounded-full shadow-lg hover:bg-[#629D23] transition-all duration-300 transform hover:scale-110">
@@ -156,7 +156,7 @@ const ProductCard: React.FC<{ product: ProductItem; variants: any }> = ({ produc
           </span>
         )}
 
-        {/* ✅ Invalid Product Warning */}
+        {/*  Invalid Product Warning */}
         {productUrl === '#' && (
           <span className="absolute bottom-3 left-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
             NO ID
@@ -190,7 +190,7 @@ const ProductCard: React.FC<{ product: ProductItem; variants: any }> = ({ produc
       <AnimatePresence>
         {isHovered && (
           <motion.button
-            key={`add-to-cart-${productId}`} // ✅ Unique key for animation
+            key={`add-to-cart-${productId}`} //  Unique key for animation
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 50, opacity: 0 }}
@@ -216,7 +216,7 @@ export default function FeaturedProducts() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ DYNAMIC DATA FETCHING LOGIC
+  //  DYNAMIC DATA FETCHING LOGIC
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -230,19 +230,12 @@ export default function FeaturedProducts() {
         
         const data = await res.json();
         
-        // ✅ Data validation - ensure it's an array
+        //  Data validation - ensure it's an array
         if (Array.isArray(data)) {
-          // ✅ Data mapping with proper IDs
+          //  Data mapping with proper IDs
           const mappedProducts = data.map((item: any, index: number) => {
-            // ✅ Multiple ID sources check karein
+            //  Multiple ID sources check karein
             const productId = item.id || item._id?.toString() || `temp-${index + 1}`;
-            
-            console.log(`🔍 [FEATURED] Product ${index}:`, {
-              name: item.name,
-              id: item.id,
-              _id: item._id,
-              finalId: productId
-            });
             
             return {
               id: productId,
@@ -315,7 +308,7 @@ export default function FeaturedProducts() {
     );
   }
 
-  // ✅ Count valid vs invalid products
+  //  Count valid vs invalid products
   const validProducts = products.filter(p => p.id && !p.id.includes('temp-'));
   const invalidProducts = products.filter(p => p.id.includes('temp-'));
 
@@ -326,7 +319,7 @@ export default function FeaturedProducts() {
           <p className="text-sm text-gray-600 uppercase tracking-widest mb-2">Shop Our New Releases</p>
           <h2 className="text-4xl font-extrabold text-gray-900">Featured Products</h2>
           
-          {/* ✅ Products Status Info */}
+          {/*  Products Status Info */}
           {invalidProducts.length > 0 && (
             <div className="mt-4 p-3 bg-yellow-100 border border-yellow-400 rounded-lg max-w-md mx-auto">
               <p className="text-sm text-yellow-700">
@@ -350,7 +343,7 @@ export default function FeaturedProducts() {
           >
             {products.map((product, index) => (
               <ProductCard 
-                key={product.id} // ✅ Now guaranteed to be unique
+                key={product.id} // Now guaranteed to be unique
                 product={product} 
                 variants={itemVariants} 
               />
